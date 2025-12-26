@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Redirect Terproteksi</title>
+    <style>
+        /* CSS untuk tampilan */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        h2 { margin-top: 0; color: #333; }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover { background-color: #0056b3; }
+
+        .error { color: red; font-size: 14px; margin-top: 10px; display: none; }
+        
+        /* Class untuk menyembunyikan elemen */
+        .hidden { display: none; }
+
+        .timer-text {
+            font-size: 48px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div id="loginSection">
+            <h2>Masukan Password</h2>
+            <p style="font-size: 14px; color: #666;">Akses ke URL ini dibatasi.</p>
+            <input type="password" id="passwordInput" placeholder="Ketik password di sini...">
+            <button onclick="checkPassword()">Buka Link</button>
+            <p id="errorMessage" class="error">Password salah!</p>
+        </div>
+
+        <div id="redirectSection" class="hidden">
+            <h2>Berhasil!</h2>
+            <p>Mengarahkan dalam:</p>
+            <div id="countdown" class="timer-text">5</div>
+            <p>detik...</p>
+        </div>
+    </div>
+
+    <script>
+        // --- KONFIGURASI DI SINI ---
+        const config = {
+            targetUrl: "https://apps.apple.com/app/amarilis/id6523429868", // Ganti dengan URL tujuan Anda
+            password: "rcellcloud.com",                     // Ganti dengan password yang diinginkan
+            countdownTime: 10                     // Waktu hitungan mundur (detik)
+        };
+        // ---------------------------
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const errorMsg = document.getElementById('errorMessage');
+
+            if (input === config.password) {
+                // Password Benar
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('redirectSection').classList.remove('hidden');
+                startCountdown();
+            } else {
+                // Password Salah
+                errorMsg.style.display = 'block';
+                // Goyangkan input sedikit (animasi sederhana via JS)
+                const inputField = document.getElementById('passwordInput');
+                inputField.style.borderColor = 'red';
+            }
+        }
+
+        function startCountdown() {
+            let timeLeft = config.countdownTime;
+            const countdownElement = document.getElementById('countdown');
+            
+            countdownElement.innerText = timeLeft;
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                countdownElement.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    window.location.href = config.targetUrl;
+                }
+            }, 1000);
+        }
+
+        // Agar bisa tekan Enter untuk submit
+        document.getElementById("passwordInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
