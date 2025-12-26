@@ -48,75 +48,38 @@
             transition: transform 0.3s ease;
         }
 
-        h2 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
-        }
+        h2 { font-weight: 600; margin-bottom: 0.5rem; letter-spacing: 1px; }
+        p { font-size: 0.9rem; opacity: 0.8; margin-bottom: 1.5rem; }
 
-        p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Input Styling */
-        .input-group {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
+        .input-group { position: relative; margin-bottom: 1.5rem; }
 
         input {
-            width: 100%;
-            padding: 12px 15px;
+            width: 100%; padding: 12px 15px;
             background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            outline: none;
-            box-sizing: border-box;
-            transition: background 0.3s;
+            border: none; border-radius: 10px;
+            color: white; font-size: 16px; outline: none;
+            box-sizing: border-box; transition: background 0.3s;
         }
-
         input::placeholder { color: rgba(255, 255, 255, 0.6); }
         input:focus { background: rgba(255, 255, 255, 0.3); }
 
-        /* Button Styling */
         button {
-            width: 100%;
-            padding: 12px;
+            width: 100%; padding: 12px;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 16px;
+            color: white; border: none; border-radius: 10px;
+            font-weight: 600; cursor: pointer; font-size: 16px;
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
+        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
         button:active { transform: translateY(0); }
 
         .error {
-            color: #ff6b6b;
-            font-size: 13px;
-            margin-top: 10px;
-            min-height: 20px;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s;
+            color: #ff6b6b; font-size: 13px; margin-top: 10px;
+            min-height: 20px; font-weight: 500; opacity: 0; transition: opacity 0.3s;
         }
-
         .show-error { opacity: 1; }
 
-        /* Shake Animation for Error */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
@@ -124,7 +87,6 @@
         }
         .shake { animation: shake 0.4s ease-in-out; }
 
-        /* Utility Classes */
         .hidden { display: none; }
         .fade-in { animation: fadeIn 0.8s ease-in forwards; }
         
@@ -133,58 +95,28 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Circular Timer CSS */
-        .timer-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-        }
-
-        .timer-svg {
-            transform: rotate(-90deg);
-            width: 120px;
-            height: 120px;
-        }
-
-        .timer-circle-bg {
-            fill: none;
-            stroke: rgba(255,255,255,0.2);
-            stroke-width: 8;
-        }
-
+        .timer-container { position: relative; width: 120px; height: 120px; margin: 0 auto 20px; }
+        .timer-svg { transform: rotate(-90deg); width: 120px; height: 120px; }
+        .timer-circle-bg { fill: none; stroke: rgba(255,255,255,0.2); stroke-width: 8; }
         .timer-circle-progress {
-            fill: none;
-            stroke: #00f260; /* Warna lingkaran progress */
-            stroke-width: 8;
-            stroke-linecap: round;
-            stroke-dasharray: 283; /* 2 * PI * R (45) */
-            stroke-dashoffset: 0;
-            transition: stroke-dashoffset 1s linear;
+            fill: none; stroke: #00f260; stroke-width: 8; stroke-linecap: round;
+            stroke-dasharray: 283; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear;
         }
-
         .timer-text-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 32px;
-            font-weight: bold;
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); font-size: 32px; font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div class="glass-card" id="mainCard">
-        
         <div id="loginSection">
             <h2>Protected Link</h2>
             <p>Masukkan kunci akses untuk melanjutkan</p>
-            
             <div class="input-group">
                 <input type="password" id="passwordInput" placeholder="Password...">
             </div>
-            
             <button onclick="checkPassword()">Unlock Access</button>
             <div id="errorMessage" class="error">Password Salah!</div>
         </div>
@@ -192,7 +124,6 @@
         <div id="redirectSection" class="hidden">
             <h2>Success!</h2>
             <p>Mengalihkan ke Amarilis...</p>
-            
             <div class="timer-container">
                 <svg class="timer-svg">
                     <circle class="timer-circle-bg" cx="60" cy="60" r="45"></circle>
@@ -200,10 +131,8 @@
                 </svg>
                 <div id="countdown" class="timer-text-overlay">10</div>
             </div>
-            
             <p style="font-size: 12px; opacity: 0.6;">Mohon tunggu sebentar.</p>
         </div>
-
     </div>
 
     <script>
@@ -213,7 +142,16 @@
             password: "rcellcloud.com",
             countdownTime: 10 
         };
-        // -------------------
+
+        // --- FITUR ANTI BACK ---
+        // Saat halaman dimuat, kita push state ke history
+        history.pushState(null, null, location.href);
+        
+        // Saat tombol back ditekan (popstate), kita push lagi ke depan
+        window.onpopstate = function () {
+            history.pushState(null, null, location.href);
+        };
+        // -----------------------
 
         function checkPassword() {
             const inputField = document.getElementById('passwordInput');
@@ -222,24 +160,17 @@
             const inputVal = inputField.value;
 
             if (inputVal === config.password) {
-                // Success Transition
                 document.getElementById('loginSection').style.display = 'none';
                 const redirectSec = document.getElementById('redirectSection');
                 redirectSec.classList.remove('hidden');
                 redirectSec.classList.add('fade-in');
-                
                 startCountdown();
             } else {
-                // Error Animation
                 errorMsg.classList.add('show-error');
                 card.classList.add('shake');
                 inputField.value = '';
                 inputField.focus();
-
-                // Remove shake class after animation
-                setTimeout(() => {
-                    card.classList.remove('shake');
-                }, 400);
+                setTimeout(() => { card.classList.remove('shake'); }, 400);
             }
         }
 
@@ -247,8 +178,6 @@
             let timeLeft = config.countdownTime;
             const countdownEl = document.getElementById('countdown');
             const circle = document.getElementById('progressCircle');
-            
-            // Perhitungan Lingkaran (Keliling = 2 * PI * r) -> r=45 -> ~283
             const circumference = 283; 
             
             countdownEl.innerText = timeLeft;
@@ -256,14 +185,11 @@
             const timer = setInterval(() => {
                 timeLeft--;
                 countdownEl.innerText = timeLeft;
-
-                // Update Progress Circle
                 const offset = circumference - (timeLeft / config.countdownTime) * circumference;
                 circle.style.strokeDashoffset = offset;
 
                 if (timeLeft <= 0) {
                     clearInterval(timer);
-                    // Efek akhir sebelum pindah
                     document.body.style.opacity = '0'; 
                     document.body.style.transition = 'opacity 0.5s';
                     setTimeout(() => {
@@ -273,12 +199,10 @@
             }, 1000);
         }
 
-        // Enter key trigger
         document.getElementById("passwordInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                checkPassword();
-            }
+            if (event.key === "Enter") { checkPassword(); }
         });
     </script>
 </body>
 </html>
+
