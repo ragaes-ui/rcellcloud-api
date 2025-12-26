@@ -3,129 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Redirect Terproteksi</title>
+    <title>Secured Redirect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS untuk tampilan */
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
+            color: var(--text-color);
         }
 
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             text-align: center;
-            width: 300px;
+            width: 320px;
+            max-width: 90%;
+            transition: transform 0.3s ease;
         }
 
-        h2 { margin-top: 0; color: #333; }
-        
+        h2 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Input Styling */
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
         input {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            outline: none;
             box-sizing: border-box;
+            transition: background 0.3s;
         }
 
+        input::placeholder { color: rgba(255, 255, 255, 0.6); }
+        input:focus { background: rgba(255, 255, 255, 0.3); }
+
+        /* Button Styling */
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #007bff;
+            padding: 12px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
             font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        button:hover { background-color: #0056b3; }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
 
-        .error { color: red; font-size: 14px; margin-top: 10px; display: none; }
-        
-        /* Class untuk menyembunyikan elemen */
+        button:active { transform: translateY(0); }
+
+        .error {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .show-error { opacity: 1; }
+
+        /* Shake Animation for Error */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out; }
+
+        /* Utility Classes */
         .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.8s ease-in forwards; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-        .timer-text {
-            font-size: 48px;
+        /* Circular Timer CSS */
+        .timer-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+
+        .timer-svg {
+            transform: rotate(-90deg);
+            width: 120px;
+            height: 120px;
+        }
+
+        .timer-circle-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.2);
+            stroke-width: 8;
+        }
+
+        .timer-circle-progress {
+            fill: none;
+            stroke: #00f260; /* Warna lingkaran progress */
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 283; /* 2 * PI * R (45) */
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .timer-text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
             font-weight: bold;
-            color: #007bff;
-            margin: 20px 0;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
+    <div class="glass-card" id="mainCard">
+        
         <div id="loginSection">
-            <h2>Masukan Password</h2>
-            <p style="font-size: 14px; color: #666;">Akses ke URL ini dibatasi.</p>
-            <input type="password" id="passwordInput" placeholder="Ketik password di sini...">
-            <button onclick="checkPassword()">Buka Link</button>
-            <p id="errorMessage" class="error">Password salah!</p>
+            <h2>Protected Link</h2>
+            <p>Masukkan kunci akses untuk melanjutkan</p>
+            
+            <div class="input-group">
+                <input type="password" id="passwordInput" placeholder="Password...">
+            </div>
+            
+            <button onclick="checkPassword()">Unlock Access</button>
+            <div id="errorMessage" class="error">Password Salah!</div>
         </div>
 
         <div id="redirectSection" class="hidden">
-            <h2>Berhasil!</h2>
-            <p>Mengarahkan dalam:</p>
-            <div id="countdown" class="timer-text">5</div>
-            <p>detik...</p>
+            <h2>Success!</h2>
+            <p>Mengalihkan ke Amarilis...</p>
+            
+            <div class="timer-container">
+                <svg class="timer-svg">
+                    <circle class="timer-circle-bg" cx="60" cy="60" r="45"></circle>
+                    <circle id="progressCircle" class="timer-circle-progress" cx="60" cy="60" r="45"></circle>
+                </svg>
+                <div id="countdown" class="timer-text-overlay">10</div>
+            </div>
+            
+            <p style="font-size: 12px; opacity: 0.6;">Mohon tunggu sebentar.</p>
         </div>
+
     </div>
 
     <script>
-        // --- KONFIGURASI DI SINI ---
+        // --- KONFIGURASI ---
         const config = {
-            targetUrl: "https://apps.apple.com/app/amarilis/id6523429868", // Ganti dengan URL tujuan Anda
-            password: "rcellcloud.com",                     // Ganti dengan password yang diinginkan
-            countdownTime: 10                     // Waktu hitungan mundur (detik)
+            targetUrl: "https://apps.apple.com/app/amarilis/id6523429868", 
+            password: "rcellcloud.com",
+            countdownTime: 10 
         };
-        // ---------------------------
+        // -------------------
 
         function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
+            const inputField = document.getElementById('passwordInput');
             const errorMsg = document.getElementById('errorMessage');
+            const card = document.getElementById('mainCard');
+            const inputVal = inputField.value;
 
-            if (input === config.password) {
-                // Password Benar
-                document.getElementById('loginSection').classList.add('hidden');
-                document.getElementById('redirectSection').classList.remove('hidden');
+            if (inputVal === config.password) {
+                // Success Transition
+                document.getElementById('loginSection').style.display = 'none';
+                const redirectSec = document.getElementById('redirectSection');
+                redirectSec.classList.remove('hidden');
+                redirectSec.classList.add('fade-in');
+                
                 startCountdown();
             } else {
-                // Password Salah
-                errorMsg.style.display = 'block';
-                // Goyangkan input sedikit (animasi sederhana via JS)
-                const inputField = document.getElementById('passwordInput');
-                inputField.style.borderColor = 'red';
+                // Error Animation
+                errorMsg.classList.add('show-error');
+                card.classList.add('shake');
+                inputField.value = '';
+                inputField.focus();
+
+                // Remove shake class after animation
+                setTimeout(() => {
+                    card.classList.remove('shake');
+                }, 400);
             }
         }
 
         function startCountdown() {
             let timeLeft = config.countdownTime;
-            const countdownElement = document.getElementById('countdown');
+            const countdownEl = document.getElementById('countdown');
+            const circle = document.getElementById('progressCircle');
             
-            countdownElement.innerText = timeLeft;
+            // Perhitungan Lingkaran (Keliling = 2 * PI * r) -> r=45 -> ~283
+            const circumference = 283; 
+            
+            countdownEl.innerText = timeLeft;
 
             const timer = setInterval(() => {
                 timeLeft--;
-                countdownElement.innerText = timeLeft;
+                countdownEl.innerText = timeLeft;
+
+                // Update Progress Circle
+                const offset = circumference - (timeLeft / config.countdownTime) * circumference;
+                circle.style.strokeDashoffset = offset;
 
                 if (timeLeft <= 0) {
                     clearInterval(timer);
-                    window.location.href = config.targetUrl;
+                    // Efek akhir sebelum pindah
+                    document.body.style.opacity = '0'; 
+                    document.body.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                         window.location.href = config.targetUrl;
+                    }, 500);
                 }
             }, 1000);
         }
 
-        // Agar bisa tekan Enter untuk submit
+        // Enter key trigger
         document.getElementById("passwordInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 checkPassword();
