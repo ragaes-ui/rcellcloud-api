@@ -136,30 +136,41 @@
     </div>
 
     <script>
-        // --- KONFIGURASI ---
+        // --- KONFIGURASI AMAN ---
         const config = {
             targetUrl: "https://apps.apple.com/app/amarilis/id6523429868", 
-            password: "rcellcloud.com",
+            // Ini adalah HASH SHA-256 dari "rcellcloud.com"
+            // Jika orang inspect, mereka hanya melihat kode acak ini.
+            passwordHash: "14e1b600b1fd579f47433b88e8d8529124430e774c81f08e4b775437877259e6",
             countdownTime: 10 
         };
 
+        // --- FUNGSI HASHING (CRYPTO API) ---
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
         // --- FITUR ANTI BACK ---
-        // Saat halaman dimuat, kita push state ke history
         history.pushState(null, null, location.href);
-        
-        // Saat tombol back ditekan (popstate), kita push lagi ke depan
         window.onpopstate = function () {
             history.pushState(null, null, location.href);
         };
-        // -----------------------
 
-        function checkPassword() {
+        // --- FUNGSI UTAMA (UPDATED) ---
+        async function checkPassword() {
             const inputField = document.getElementById('passwordInput');
             const errorMsg = document.getElementById('errorMessage');
             const card = document.getElementById('mainCard');
             const inputVal = inputField.value;
 
-            if (inputVal === config.password) {
+            // Mengubah input user menjadi hash lalu dicocokkan
+            const hashedInput = await sha256(inputVal);
+
+            if (hashedInput === config.passwordHash) {
                 document.getElementById('loginSection').style.display = 'none';
                 const redirectSec = document.getElementById('redirectSection');
                 redirectSec.classList.remove('hidden');
@@ -205,4 +216,3 @@
     </script>
 </body>
 </html>
-
