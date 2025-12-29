@@ -136,12 +136,15 @@
     </div>
 
     <script>
-        // --- KONFIGURASI AMAN (VERSI BTOA) ---
+        // --- KONFIGURASI AMAN (FULL ENCODED) ---
         const config = {
-            targetUrl: "https://apps.apple.com/app/amarilis/id6523429868", 
-            // "rcellcloud.com" yang sudah diacak menjadi Base64
-            // Di Inspect Element hanya terlihat kode ini:
+            // URL ASLI: https://apps.apple.com/app/amarilis/id6523429868
+            // Diubah menjadi kode Base64 di bawah ini:
+            targetUrlEnc: "aHR0cHM6Ly9hcHBzLmFwcGxlLmNvbS9hcHAvYW1hcmlsaXMvaWQ2NTIzNDI5ODY4", 
+            
+            // Password: rcellcloud.com (Encoded)
             passKey: "cmNlbGxjbG91ZC5jb20=", 
+            
             countdownTime: 10 
         };
 
@@ -151,29 +154,25 @@
             history.pushState(null, null, location.href);
         };
 
-        // --- FUNGSI DECODE/ENCODE SEDERHANA ---
+        // --- LOGIKA UTAMA ---
         function checkPassword() {
             const inputField = document.getElementById('passwordInput');
             const errorMsg = document.getElementById('errorMessage');
             const card = document.getElementById('mainCard');
             const inputVal = inputField.value;
 
-            // Kita acak input user, lalu bandingkan dengan passKey
-            // btoa() mengubah teks menjadi kode Base64
+            // Cek Password (Encoded)
             try {
                 if (btoa(inputVal) === config.passKey) {
-                    // Jika Benar
                     document.getElementById('loginSection').style.display = 'none';
                     const redirectSec = document.getElementById('redirectSection');
                     redirectSec.classList.remove('hidden');
                     redirectSec.classList.add('fade-in');
                     startCountdown();
                 } else {
-                    // Jika Salah
                     throwError();
                 }
             } catch (e) {
-                // Jika input mengandung karakter aneh yang gagal di-encode
                 throwError();
             }
 
@@ -204,8 +203,16 @@
                     clearInterval(timer);
                     document.body.style.opacity = '0'; 
                     document.body.style.transition = 'opacity 0.5s';
+                    
+                    // --- DECODE URL SEBELUM PENGALIHAN ---
+                    // atob() mengubah kode acak kembali menjadi URL asli
                     setTimeout(() => {
-                         window.location.href = config.targetUrl;
+                         try {
+                            const realUrl = atob(config.targetUrlEnc);
+                            window.location.href = realUrl;
+                         } catch(e) {
+                             alert("Terjadi kesalahan pada link tujuan.");
+                         }
                     }, 500);
                 }
             }, 1000);
