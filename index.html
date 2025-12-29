@@ -136,23 +136,14 @@
     </div>
 
     <script>
-        // --- KONFIGURASI AMAN ---
+        // --- KONFIGURASI AMAN (VERSI BTOA) ---
         const config = {
             targetUrl: "https://apps.apple.com/app/amarilis/id6523429868", 
-            // Ini adalah HASH SHA-256 dari "rcellcloud.com"
-            // Jika orang inspect, mereka hanya melihat kode acak ini.
-            passwordHash: "14e1b600b1fd579f47433b88e8d8529124430e774c81f08e4b775437877259e6",
+            // "rcellcloud.com" yang sudah diacak menjadi Base64
+            // Di Inspect Element hanya terlihat kode ini:
+            passKey: "cmNlbGxjbG91ZC5jb20=", 
             countdownTime: 10 
         };
-
-        // --- FUNGSI HASHING (CRYPTO API) ---
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
-        }
 
         // --- FITUR ANTI BACK ---
         history.pushState(null, null, location.href);
@@ -160,23 +151,33 @@
             history.pushState(null, null, location.href);
         };
 
-        // --- FUNGSI UTAMA (UPDATED) ---
-        async function checkPassword() {
+        // --- FUNGSI DECODE/ENCODE SEDERHANA ---
+        function checkPassword() {
             const inputField = document.getElementById('passwordInput');
             const errorMsg = document.getElementById('errorMessage');
             const card = document.getElementById('mainCard');
             const inputVal = inputField.value;
 
-            // Mengubah input user menjadi hash lalu dicocokkan
-            const hashedInput = await sha256(inputVal);
+            // Kita acak input user, lalu bandingkan dengan passKey
+            // btoa() mengubah teks menjadi kode Base64
+            try {
+                if (btoa(inputVal) === config.passKey) {
+                    // Jika Benar
+                    document.getElementById('loginSection').style.display = 'none';
+                    const redirectSec = document.getElementById('redirectSection');
+                    redirectSec.classList.remove('hidden');
+                    redirectSec.classList.add('fade-in');
+                    startCountdown();
+                } else {
+                    // Jika Salah
+                    throwError();
+                }
+            } catch (e) {
+                // Jika input mengandung karakter aneh yang gagal di-encode
+                throwError();
+            }
 
-            if (hashedInput === config.passwordHash) {
-                document.getElementById('loginSection').style.display = 'none';
-                const redirectSec = document.getElementById('redirectSection');
-                redirectSec.classList.remove('hidden');
-                redirectSec.classList.add('fade-in');
-                startCountdown();
-            } else {
+            function throwError() {
                 errorMsg.classList.add('show-error');
                 card.classList.add('shake');
                 inputField.value = '';
